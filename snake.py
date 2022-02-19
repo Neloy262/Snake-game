@@ -1,6 +1,6 @@
 import pygame
 import random
-
+from preprocess_image import process
 pygame.init()
 
 WIN_HEIGHT = 500
@@ -8,7 +8,7 @@ WIN_WIDTH = 900
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 FPS = 30
-
+L = []
 SNAKE_SIZE = 15
 
 surface = pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
@@ -34,7 +34,7 @@ class Snake():
         self.head = pygame.rect.Rect(x,y,SNAKE_SIZE,SNAKE_SIZE)
         self.body.append(self.head)
         self.eaten = False
-        
+        self.points = 0
     
 
     def draw_body(self,surface):
@@ -44,6 +44,7 @@ class Snake():
 
 
     def increase(self):
+        self.points+=1
         self.body.append(pygame.rect.Rect(self.body[-1].x,self.body[-1].y,SNAKE_SIZE,SNAKE_SIZE))
     
     def move(self,val):
@@ -58,6 +59,7 @@ class Snake():
                 temp = self.body[i].copy()
                 self.body[i] = prev.copy()
                 prev = temp.copy()
+
                   
         if val == 1:
             
@@ -94,10 +96,14 @@ class Snake():
                 self.body[i] = prev.copy()
                 prev = temp.copy()
 
+
+        if val == 4:
+            return
+
     
         
             
-def collision(rect1,rect2):
+def Eat(rect1,rect2):
 
     return rect1.colliderect(rect2)
 
@@ -126,16 +132,17 @@ def show_score():
     score_font = font.render("Score:"+str(score),True,(0,0,0))
     surface.blit(score_font,(textx,texty))
 
-def step():
+def main():
+   
     
-    
-    snake = Snake(50,50)
+    snake = Snake(300,250)
     fx = random.randint(10,890)
     fy = random.randint(10,490)
     food = Food(fx,fy)
     eaten = False
     run = True
     val = -1
+    # surface.fill((255,255,255))
     while run:
     
         for event in pygame.event.get():
@@ -157,7 +164,9 @@ def step():
         
         surface.fill((255,255,255))
         snake.draw_body(surface)
+        food.draw()
         snake.move(val)
+       
         if eaten:
             global score
             score+=1
@@ -165,12 +174,12 @@ def step():
             fx = random.randint(10,890)
             fy = random.randint(10,490)
             food = Food(fx,fy)
-        else:
-            food.draw()
+        
+        
         
         clock.tick(FPS)
         
-        eaten=collision(snake.body[0],food.head)
+        eaten=Eat(snake.body[0],food.head)
         
         gm = gameover(snake)
         show_score()
@@ -178,11 +187,14 @@ def step():
         if gm==-1:
             break
         
+        
 
 
     pygame.quit()
 
 
 if __name__=="__main__":
-    step()
+    main()
+
+
 
