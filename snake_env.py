@@ -65,10 +65,19 @@ class SnakeEnv(Env):
         fy = random.randint(20,480)
         self.food = Food(fx,fy)
 
-        self.render()
+
+        frames = []
+
+        for i in range(2):
+            val = random.randint(0,5)
+            self.snake.move(val)
+            self.render()
+
+            frames.append(process(pygame.surfarray.array3d(self.surface)))
 
         
-        return process(pygame.surfarray.array3d(self.surface))
+
+        return frames[1] - frames[0]
         
 
     def render(self):
