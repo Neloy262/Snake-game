@@ -9,7 +9,7 @@ BLACK = (0,0,0)
 WHITE = (255,255,255)
 FPS = 30
 L = []
-SNAKE_SIZE = 15
+SNAKE_SIZE = 25
 
 surface = pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
 clock = pygame.time.Clock()
@@ -34,7 +34,7 @@ class Snake():
         self.head = pygame.rect.Rect(x,y,SNAKE_SIZE,SNAKE_SIZE)
         self.body.append(self.head)
         self.eaten = False
-        self.points = 0
+        self.points = 1
     
 
     def draw_body(self,surface):
